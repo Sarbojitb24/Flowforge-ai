@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowForge AI — Automate Everything</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: #050814;
+      color: #e5e7eb;
+      overflow-x: hidden;
+    }
+
+    a { text-decoration: none; color: inherit; }
+    button { font-family: inherit; }
+
+    /* Glow Background */
+    .bg-glow {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -2;
+      background:
+        radial-gradient(circle at 20% 20%, rgba(99,102,241,0.25), transparent 45%),
+        radial-gradient(circle at 80% 30%, rgba(236,72,153,0.20), transparent 45%),
+        radial-gradient(circle at 50% 80%, rgba(34,197,94,0.18), transparent 50%);
+      filter: blur(30px);
+      opacity: 0.9;
+    }
+
+    /* Header */
+    header {
+      position: fixed;
+      width: 100%;
+      top: 0;
+      z-index: 999;
+      background: rgba(5,8,20,0.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    nav {
+      max-width: 1200px;
+      margin: auto;
+      padding: 16px 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 900;
+      font-size: 1.3rem;
+      color: white;
+    }
+
+    .logo-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 900;
+      box-shadow: 0 0 25px rgba(99,102,241,0.25);
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 22px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.75);
+    }
+    .nav-links a:hover { color: white; }
+
+    .nav-btns {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .btn {
+      padding: 12px 18px;
+      border-radius: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 15px 40px rgba(99,102,241,0.25);
+    }
+
+    .btn-outline {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.15);
+      color: white;
+    }
+
+    .btn-outline:hover {
+      border-color: rgba(255,255,255,0.45);
+    }
+
+    /* Hero */
+    .hero {
+      max-width: 1200px;
+      margin: auto;
+      padding: 150px 20px 80px;
+      text-align: center;
+    }
+
+    .hero h1 {
+      font-size: 3.2rem;
+      font-weight: 900;
+      color: white;
+      line-height: 1.1;
+      margin-bottom: 18px;
+    }
+
+    .hero p {
+      max-width: 780px;
+      margin: auto;
+      font-size: 1.1rem;
+      color: rgba(255,255,255,0.75);
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+
+    .hero-badges {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 25px;
+    }
+
+    .badge {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      font-weight: 700;
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.75);
+    }
+
+    .search-box {
+      margin: 40px auto 0;
+      max-width: 800px;
+      display: flex;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 18px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      backdrop-filter: blur(12px);
+    }
+
+    .search-box input {
+      flex: 1;
+      padding: 14px;
+      background: transparent;
+      border: none;
+      outline: none;
+      color: white;
+      font-size: 1rem;
+    }
+
+    .search-box button {
+      padding: 14px 18px;
+      border-radius: 14px;
+      font-weight: 900;
+      border: none;
+      cursor: pointer;
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      color: white;
+    }
+
+    /* Sections */
+    .section {
+      max-width: 1200px;
+      margin: auto;
+      padding: 80px 20px;
+    }
+
+    .section-title {
+      font-size: 2rem;
+      font-weight: 900;
+      color: white;
+      margin-bottom: 10px;
+    }
+
+    .section-subtitle {
+      color: rgba(255,255,255,0.7);
+      max-width: 800px;
+      line-height: 1.7;
+      margin-bottom: 30px;
+    }
+
+    /* White Section */
+    .light-section {
+      background: #ffffff;
+      color: #111827;
+      border-top-left-radius: 50px;
+      border-top-right-radius: 50px;
+    }
+
+    .light-section .section-title {
+      color: #0f172a;
+    }
+
+    .light-section .section-subtitle {
+      color: #334155;
+    }
+
+    /* Business Type Cards */
+    .business-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 16px;
+    }
+
+    .biz-card {
+      padding: 18px;
+      border-radius: 18px;
+      border: 1px solid rgba(15,23,42,0.12);
+      background: rgba(255,255,255,0.9);
+      box-shadow: 0 10px 30px rgba(15,23,42,0.06);
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .biz-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(99,102,241,0.5);
+    }
+
+    .biz-title {
+      font-weight: 900;
+      margin-bottom: 8px;
+      font-size: 1.1rem;
+    }
+
+    .biz-desc {
+      color: #475569;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Modules Grid */
+    .filters {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 20px;
+    }
+
+    .filter-btn {
+      padding: 10px 14px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      cursor: pointer;
+      font-weight: 800;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .filter-btn.active {
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      border: none;
+      color: white;
+    }
+
+    .modules-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+      gap: 16px;
+    }
+
+    .module-card {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 20px;
+      padding: 18px;
+      cursor: pointer;
+      transition: 0.25s ease;
+    }
+
+    .module-card:hover {
+      transform: translateY(-6px);
+      border-color: rgba(99,102,241,0.6);
+      box-shadow: 0 20px 45px rgba(0,0,0,0.35);
+    }
+
+    .module-top {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .module-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-weight: 900;
+      font-size: 1.2rem;
+      color: white;
+      box-shadow: 0 0 30px rgba(99,102,241,0.20);
+    }
+
+    .module-name {
+      font-weight: 900;
+      font-size: 1.1rem;
+      color: white;
+    }
+
+    .module-category {
+      font-size: 0.85rem;
+      font-weight: 800;
+      color: rgba(255,255,255,0.65);
+    }
+
+    .module-desc {
+      margin-top: 6px;
+      font-size: 0.95rem;
+      line-height: 1.6;
+      color: rgba(255,255,255,0.78);
+    }
+
+    .module-tags {
+      margin-top: 14px;
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .tag {
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.10);
+      font-size: 0.75rem;
+      font-weight: 900;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .module-actions {
+      margin-top: 16px;
+      display: flex;
+      gap: 10px;
+    }
+
+    .small-btn {
+      flex: 1;
+      padding: 10px;
+      border-radius: 14px;
+      font-weight: 900;
+      cursor: pointer;
+      border: none;
+      transition: 0.2s ease;
+    }
+
+    .small-btn.primary {
+      background: linear-gradient(135deg, #6366f1, #ec4899);
+      color: white;
+    }
+
+    .small-btn.secondary {
+      background: transparent;
+      border: 1px solid rgba(255,255,255,0.14);
+      color: white;
+    }
+
+    /* Dashboard */
+    .dashboard {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    .panel {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .panel h3 {
+      font-size: 1.2rem;
+      font-weight: 900;
+      margin-bottom: 12px;
+      color: white;
+    }
+
+    .automation-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.08);
+      margin-bottom: 10px;
+      font-weight: 800;
+      color: rgba(255,255,255,0.85);
+    }
+
+    .remove-btn {
+      padding: 8px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(239,68,68,0.35);
+      background: rgba(239,68,68,0.15);
+      color: #fecaca;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    /* AI Assistant */
+    .assistant-box {
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.10);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .chat-area {
+      height: 280px;
+      overflow-y: auto;
+      padding: 12px;
+      border-radius: 14px;
+      background: rgba(0,0,0,0.25);
+      border: 1px solid rgba(255,255,255,0.06);
+      margin-bottom: 12px;
+    }
+
+    .chat-msg {
+      margin-bottom: 12px;
+      line-height: 1.5;
+      font-size: 0.95rem;
+    }
+
+    .user-msg {
+      color: white;
+      font-weight: 800;
+    }
+
+    .bot-msg {
+      color: rgba(255,255,255,0.75);
+    }
+
+    .chat-input {
+      display: flex;
+      gap: 10px;
+    }
+
+    .chat-input input {
+      flex: 1;
+      padding: 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.05);
+      color: white;
+      outline: none;
+      font-weight: 700;
+    }
+
+    /* Modal */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 9999;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 20px;
+      justify-content: center;
+      align-items: center;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(12px);
+    }
+
+    .modal-content {
+      width: 100%;
+      max-width: 650px;
+      border-radius: 20px;
+      padding: 20px;
+      background: rgba(5,8,20,0.95);
+      border: 1px solid rgba(255,255,255,0.14);
+      position: relative;
+      animation: pop 0.25s ease;
+    }
+
+    @keyframes pop {
+      from { transform: scale(0.92); opacity: 0.3; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .close-btn {
+      position: absolute;
+      right: 12px;
+      top: 12px;
+      width: 40px;
+      height: 40px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: white;
+      cursor: pointer;
+      font-weight: 900;
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 50px 20px;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      color: rgba(255,255,255,0.65);
+    }
+
+    /* Responsive */
+    @media(max-width: 900px) {
+      .nav-links { display: none; }
+      .hero h1 { font-size: 2.2rem; }
+      .dashboard { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="bg-glow"></div>
+
+  <header>
+    <nav>
+      <div class="logo">
+        <div class="logo-icon">F</div>
+        FlowForge AI
+      </div>
+
+      <div class="nav-links">
+        <a href="#start">Start</a>
+        <a href="#modules">Modules</a>
+        <a href="#dashboard">Dashboard</a>
+        <a href="#assistant">AI Assistant</a>
+      </div>
+
+      <div class="nav-btns">
+        <button class="btn btn-outline" onclick="openLogin()">Login</button>
+        <a href="#modules" class="btn btn-primary">Explore</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-badges">
+      <div class="badge">⚡ No-Code Automations</div>
+      <div class="badge">🤖 AI Workflows</div>
+      <div class="badge">📩 WhatsApp + Email + CRM</div>
+      <div class="badge">📊 Sheets + Reports</div>
+    </div>
+
+    <h1>Forge AI Workflows<br>Automate Your Business</h1>
+    <p>
+      FlowForge AI is your automation command center. Choose a business type, select AI modules,
+      build workflows, and automate tasks like lead handling, customer support, invoices, marketing,
+      recruitment and reporting.
+    </p>
+
+    <div class="search-box">
+      <input id="searchInput" placeholder="Search: WhatsApp automation, invoice AI, lead follow-up..." />
+      <button onclick="searchModules()">Search</button>
+    </div>
+  </section>
+
+  <!-- BUSINESS TYPE -->
+  <section class="section light-section" id="start">
+    <div class="section">
+      <h2 class="section-title">Choose Your Business Type</h2>
+      <p class="section-subtitle">
+        Click your business type and FlowForge will recommend the best automations instantly.
+      </p>
+
+      <div class="business-grid">
+        <div class="biz-card" onclick="recommend('E-commerce')">
+          <div class="biz-title">🛒 E-commerce Store</div>
+          <div class="biz-desc">Automate orders, invoices, WhatsApp updates, abandoned cart follow-ups.</div>
+        </div>
+
+        <div class="biz-card" onclick="recommend('Real Estate')">
+          <div class="biz-title">🏠 Real Estate</div>
+          <div class="biz-desc">Automate lead capture, property follow-ups, visit scheduling, CRM updates.</div>
+        </div>
+
+        <div class="biz-card" onclick="recommend('Restaurant')">
+          <div class="biz-title">🍔 Restaurant / Food</div>
+          <div class="biz-desc">Automate bookings, WhatsApp ordering, reviews, offers & loyalty marketing.</div>
+        </div>
+
+        <div class="biz-card" onclick="recommend('Freelancer')">
+          <div class="biz-title">💼 Freelancer / Agency</div>
+          <div class="biz-desc">Automate proposals, invoices, follow-ups, client onboarding, reporting.</div>
+        </div>
+
+        <div class="biz-card" onclick="recommend('HR')">
+          <div class="biz-title">👥 HR / Recruitment</div>
+          <div class="biz-desc">Automate resume screening, interview scheduling, shortlist reports.</div>
+        </div>
+
+        <div class="biz-card" onclick="recommend('Education')">
+          <div class="biz-title">🎓 Coaching / Education</div>
+          <div class="biz-desc">Automate student leads, WhatsApp follow-ups, payment reminders.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- MODULES -->
+  <section class="section" id="modules">
+    <h2 class="section-title">AI Modules Marketplace</h2>
+    <p class="section-subtitle">
+      Pick any module, add it to your dashboard, and build workflows.
+    </p>
+
+    <div class="filters" id="filters"></div>
+    <div class="modules-grid" id="modulesGrid"></div>
+  </section>
+
+  <!-- DASHBOARD -->
+  <section class="section" id="dashboard">
+    <h2 class="section-title">Automation Dashboard</h2>
+    <p class="section-subtitle">
+      Your selected modules are saved here. This becomes your automation engine.
+    </p>
+
+    <div class="dashboard">
+      <div class="panel">
+        <h3>My Automations</h3>
+        <div id="automationList"></div>
+        <br>
+        <button class="btn btn-primary" style="width:100%" onclick="runAutomationDemo()">
+          Run Automation Demo
+        </button>
+      </div>
+
+      <div class="panel">
+        <h3>Workflow Builder (Demo)</h3>
+        <p style="color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:14px;">
+          FlowForge will soon let you drag & connect triggers + actions like Zapier.
+        </p>
+
+        <div class="automation-item">Trigger → New Lead from WhatsApp / Website</div>
+        <div class="automation-item">AI Action → Qualify Lead + Score</div>
+        <div class="automation-item">Action → Save to Google Sheets</div>
+        <div class="automation-item">Action → Send Follow-up Email</div>
+        <div class="automation-item">Action → Update CRM Pipeline</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI ASSISTANT -->
+  <section class="section" id="assistant">
+    <h2 class="section-title">FlowForge AI Assistant</h2>
+    <p class="section-subtitle">
+      Ask the assistant what automation you should use. It will recommend workflows.
+    </p>
+
+    <div class="assistant-box">
+      <div class="chat-area" id="chatArea">
+        <div class="chat-msg bot-msg"><b>FlowForge AI:</b> Hello 👋 Tell me your business and I will suggest automations.</div>
+      </div>
+
+      <div class="chat-input">
+        <input id="chatInput" placeholder="Example: I run a gym, how can I automate lead follow-ups?" />
+        <button class="btn btn-primary" onclick="sendChat()">Send</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 FlowForge AI — Automate faster. Work smarter. Grow bigger.
+  </footer>
+
+  <!-- MODULE MODAL -->
+  <div class="modal" id="moduleModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeModal()">✕</button>
+      <h2 id="modalTitle" style="margin-bottom:6px;"></h2>
+      <p id="modalCategory" style="color:rgba(255,255,255,0.7);font-weight:800;margin-bottom:16px;"></p>
+      <p id="modalDesc" style="color:rgba(255,255,255,0.78);line-height:1.7;margin-bottom:18px;"></p>
+
+      <button class="btn btn-primary" style="width:100%" onclick="addToAutomation()">
+        Add to My Automations
+      </button>
+    </div>
+  </div>
+
+  <!-- LOGIN MODAL -->
+  <div class="modal" id="loginModal">
+    <div class="modal-content">
+      <button class="close-btn" onclick="closeLogin()">✕</button>
+      <h2 style="margin-bottom:12px;">Login</h2>
+      <p style="color:rgba(255,255,255,0.7);margin-bottom:18px;">
+        Demo login. You can connect Firebase authentication later.
+      </p>
+
+      <input style="width:100%;padding:14px;border-radius:14px;border:none;margin-bottom:12px;"
+             placeholder="Email" />
+      <input style="width:100%;padding:14px;border-radius:14px;border:none;margin-bottom:12px;"
+             placeholder="Password" type="password" />
+
+      <button class="btn btn-primary" style="width:100%" onclick="alert('Login Successful (Demo)')">
+        Login
+      </button>
+    </div>
+  </div>
+
+  <script>
+    const modules = [
+      { name:"WhatsApp Auto Reply AI", category:"Customer Support", desc:"Automatically reply to WhatsApp messages using AI. Capture leads, handle FAQs, booking confirmations.", tags:["WhatsApp","Chatbot","Support"] },
+      { name:"Instagram DM Automation AI", category:"Marketing", desc:"Auto-reply to Instagram DMs, send catalog, save leads to Sheets & CRM.", tags:["Instagram","Leads","DM"] },
+      { name:"AI Lead Qualification", category:"Sales", desc:"Scores leads based on interest, urgency, and budget. Automatically updates CRM pipeline.", tags:["CRM","Leads","Scoring"] },
+      { name:"Email Follow-up AI", category:"Sales", desc:"Automatically send personalized follow-up emails and reminders to leads.", tags:["Email","Follow-up","Sales"] },
+      { name:"Invoice Generator AI", category:"Finance", desc:"Generate invoices automatically and send them via email/WhatsApp. Includes GST format.", tags:["Invoice","GST","PDF"] },
+      { name:"Google Sheets Auto Report", category:"Productivity", desc:"Automatically generate weekly sales reports, lead reports, customer data reports.", tags:["Sheets","Reports","Automation"] },
+      { name:"Shopify Order Automation", category:"E-commerce", desc:"Detect new orders, send confirmations, update customers, create invoices, track delivery.", tags:["Shopify","Orders","Ecom"] },
+      { name:"AI Customer Feedback Analyzer", category:"Customer Support", desc:"Analyze reviews and customer feedback. Detect negative sentiment and auto-suggest fixes.", tags:["Sentiment","Reviews","Support"] },
+      { name:"Recruitment Resume Scanner", category:"HR", desc:"Upload resumes and auto-shortlist candidates based on job description and skills.", tags:["Hiring","Resume","HR"] },
+      { name:"AI Appointment Scheduler", category:"Productivity", desc:"Auto-schedule appointments, reminders, calendar sync and WhatsApp confirmations.", tags:["Calendar","Booking","Reminders"] },
+      { name:"AI Content Generator", category:"Marketing", desc:"Generate ad copy, reels scripts, SEO blogs, captions, product descriptions.", tags:["SEO","Content","Ads"] },
+      { name:"AI Call Summary + CRM Update", category:"Sales", desc:"Summarize calls and update CRM notes automatically with next steps.", tags:["Calls","CRM","Summary"] }
+    ];
+
+    let selectedModules = [];
+    let currentModule = null;
+
+    const filtersContainer = document.getElementById("filters");
+    const modulesGrid = document.getElementById("modulesGrid");
+    const automationList = document.getElementById("automationList");
+
+    function getCategories() {
+      const cats = modules.map(m => m.category);
+      return ["All", ...new Set(cats)];
+    }
+
+    function renderFilters() {
+      filtersContainer.innerHTML = "";
+      getCategories().forEach((cat, index) => {
+        const btn = document.createElement("button");
+        btn.className = "filter-btn" + (index === 0 ? " active" : "");
+        btn.innerText = cat;
+        btn.onclick = () => filterModules(cat, btn);
+        filtersContainer.appendChild(btn);
+      });
+    }
+
+    function renderModules(data) {
+      modulesGrid.innerHTML = "";
+
+      data.forEach(mod => {
+        const card = document.createElement("div");
+        card.className = "module-card";
+        card.onclick = () => openModule(mod);
+
+        card.innerHTML = `
+          <div class="module-top">
+            <div class="module-icon">${mod.name.charAt(0)}</div>
+            <div style="flex:1">
+              <div class="module-name">${mod.name}</div>
+              <div class="module-category">${mod.category}</div>
+            </div>
+          </div>
+
+          <div class="module-desc">${mod.desc}</div>
+
+          <div class="module-tags">
+            ${mod.tags.map(t => `<div class="tag">${t}</div>`).join("")}
+          </div>
+
+          <div class="module-actions">
+            <button class="small-btn primary" onclick="event.stopPropagation(); quickAdd('${mod.name}')">Add</button>
+            <button class="small-btn secondary" onclick="event.stopPropagation(); openModule(mod)">Details</button>
+          </div>
+        `;
+
+        modulesGrid.appendChild(card);
+      });
+    }
+
+    function filterModules(category, btn) {
+      document.querySelectorAll(".filter-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+
+      if (category === "All") renderModules(modules);
+      else renderModules(modules.filter(m => m.category === category));
+    }
+
+    function openModule(mod) {
+      currentModule = mod;
+      document.getElementById("modalTitle").innerText = mod.name;
+      document.getElementById("modalCategory").innerText = mod.category;
+      document.getElementById("modalDesc").innerText = mod.desc;
+      document.getElementById("moduleModal").style.display = "flex";
+    }
+
+    function closeModal() {
+      document.getElementById("moduleModal").style.display = "none";
+    }
+
+    function addToAutomation() {
+      if (!currentModule) return;
+      if (!selectedModules.includes(currentModule.name)) {
+        selectedModules.push(currentModule.name);
+        renderAutomationList();
+      }
+      closeModal();
+    }
+
+    function quickAdd(name) {
+      if (!selectedModules.includes(name)) {
+        selectedModules.push(name);
+        renderAutomationList();
+      }
+      alert(name + " added!");
+    }
+
+    function renderAutomationList() {
+      automationList.innerHTML = "";
+
+      if (selectedModules.length === 0) {
+        automationList.innerHTML = `<p style="color:rgba(255,255,255,0.7);">No modules added yet.</p>`;
+        return;
+      }
+
+      selectedModules.forEach(mod => {
+        const div = document.createElement("div");
+        div.className = "automation-item";
+        div.innerHTML = `
+          <span>${mod}</span>
+          <button class="remove-btn" onclick="removeAutomation('${mod}')">Remove</button>
+        `;
+        automationList.appendChild(div);
+      });
+    }
+
+    function removeAutomation(name) {
+      selectedModules = selectedModules.filter(m => m !== name);
+      renderAutomationList();
+    }
+
+    function searchModules() {
+      const query = document.getElementById("searchInput").value.toLowerCase();
+      const results = modules.filter(m =>
+        m.name.toLowerCase().includes(query) ||
+        m.category.toLowerCase().includes(query) ||
+        m.desc.toLowerCase().includes(query) ||
+        m.tags.join(" ").toLowerCase().includes(query)
+      );
+      renderModules(results);
+    }
+
+    function runAutomationDemo() {
+      if (selectedModules.length === 0) {
+        alert("Add at least one module first.");
+        return;
+      }
+      alert("🚀 Running Automation Demo...\n\nModules:\n" + selectedModules.join("\n"));
+    }
+
+    function recommend(type) {
+      let suggestion = "";
+
+      if (type === "E-commerce") {
+        suggestion = "Recommended Modules: Shopify Order Automation, Invoice Generator, WhatsApp Auto Reply, Customer Feedback Analyzer.";
+      }
+      if (type === "Real Estate") {
+        suggestion = "Recommended Modules: AI Lead Qualification, WhatsApp Auto Reply, Email Follow-up AI, AI Appointment Scheduler.";
+      }
+      if (type === "Restaurant") {
+        suggestion = "Recommended Modules: WhatsApp Auto Reply AI, AI Appointment Scheduler, Customer Feedback Analyzer, Instagram DM Automation.";
+      }
+      if (type === "Freelancer") {
+        suggestion = "Recommended Modules: Invoice Generator AI, Email Follow-up AI, Google Sheets Auto Report, AI Content Generator.";
+      }
+      if (type === "HR") {
+        suggestion = "Recommended Modules: Recruitment Resume Scanner, Email Follow-up AI, Google Sheets Auto Report.";
+      }
+      if (type === "Education") {
+        suggestion = "Recommended Modules: WhatsApp Auto Reply AI, AI Appointment Scheduler, Invoice Generator AI, Email Follow-up AI.";
+      }
+
+      alert("📌 " + type + "\n\n" + suggestion);
+      document.getElementById("modules").scrollIntoView({ behavior: "smooth" });
+    }
+
+    // AI Assistant (Demo Logic)
+    function sendChat() {
+      const input = document.getElementById("chatInput");
+      const chatArea = document.getElementById("chatArea");
+
+      const msg = input.value.trim();
+      if (!msg) return;
+
+      chatArea.innerHTML += `<div class="chat-msg user-msg"><b>You:</b> ${msg}</div>`;
+
+      let reply = "I recommend using WhatsApp Auto Reply AI + AI Lead Qualification + Google Sheets Auto Report.";
+
+      if (msg.toLowerCase().includes("restaurant") || msg.toLowerCase().includes("food")) {
+        reply = "For restaurants: WhatsApp Auto Reply AI + Instagram DM Automation + Customer Feedback Analyzer + Appointment Scheduler.";
+      } 
+      else if (msg.toLowerCase().includes("shop") || msg.toLowerCase().includes("ecommerce") || msg.toLowerCase().includes("store")) {
+        reply = "For e-commerce: Shopify Order Automation + Invoice Generator AI + WhatsApp Auto Reply + Email Follow-up AI.";
+      }
+      else if (msg.toLowerCase().includes("real estate") || msg.toLowerCase().includes("property")) {
+        reply = "For real estate: AI Lead Qualification + WhatsApp Auto Reply + Appointment Scheduler + CRM follow-ups.";
+      }
+      else if (msg.toLowerCase().includes("gym") || msg.toLowerCase().includes("fitness")) {
+        reply = "For gyms: WhatsApp Auto Reply AI + Appointment Scheduler + Email Follow-up AI + Google Sheets reports.";
+      }
+
+      chatArea.innerHTML += `<div class="chat-msg bot-msg"><b>FlowForge AI:</b> ${reply}</div>`;
+      chatArea.scrollTop = chatArea.scrollHeight;
+
+      input.value = "";
+    }
+
+    function openLogin() {
+      document.getElementById("loginModal").style.display = "flex";
+    }
+    function closeLogin() {
+      document.getElementById("loginModal").style.display = "none";
+    }
+
+    window.onclick = function(event) {
+      const moduleModal = document.getElementById("moduleModal");
+      const loginModal = document.getElementById("loginModal");
+      if (event.target === moduleModal) closeModal();
+      if (event.target === loginModal) closeLogin();
+    };
+
+    // Initial Render
+    renderFilters();
+    renderModules(modules);
+    renderAutomationList();
+  </script>
+
+</body>
+</html>
